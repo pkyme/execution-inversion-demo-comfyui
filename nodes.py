@@ -119,6 +119,38 @@ class InversionDemoLazySwitch:
         value = on_true if switch else on_false
         return (value,)
 
+@VariantSupport()
+class InversionDemoLazySwitchOptional:
+    def __init__(self):
+        pass
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "switch": ("BOOLEAN",),
+            },
+            "optional": {
+                "on_false": ("*", {"lazy": True}),
+                "on_true": ("*", {"lazy": True}),
+            },
+        }
+
+    RETURN_TYPES = ("*",)
+    FUNCTION = "switch"
+
+    CATEGORY = "InversionDemo Nodes/Logic"
+
+    def check_lazy_status(self, switch, on_false = None, on_true = None):
+        if switch and on_true is None:
+            return ["on_true"]
+        if not switch and on_false is None:
+            return ["on_false"]
+
+    def switch(self, switch, on_false = None, on_true = None):
+        value = on_true if switch else on_false
+        return (value,)
+
 NUM_IF_ELSE_NODES = 10
 @VariantSupport()
 class InversionDemoLazyConditional:
@@ -265,6 +297,7 @@ class InversionDemoLazyMixImages:
 GENERAL_NODE_CLASS_MAPPINGS = {
     "InversionDemoAdvancedPromptNode": InversionDemoAdvancedPromptNode,
     "InversionDemoLazySwitch": InversionDemoLazySwitch,
+    "InversionDemoLazySwitchOptional": InversionDemoLazySwitchOptional,
     "InversionDemoLazyIndexSwitch": InversionDemoLazyIndexSwitch,
     "InversionDemoLazyMixImages": InversionDemoLazyMixImages,
     "InversionDemoLazyConditional": InversionDemoLazyConditional,
@@ -273,6 +306,7 @@ GENERAL_NODE_CLASS_MAPPINGS = {
 GENERAL_NODE_DISPLAY_NAME_MAPPINGS = {
     "InversionDemoAdvancedPromptNode": "Advanced Prompt",
     "InversionDemoLazySwitch": "Lazy Switch",
+    "InversionDemoLazySwitchOptional": "Lazy Switch Optional",
     "InversionDemoLazyIndexSwitch": "Lazy Index Switch",
     "InversionDemoLazyMixImages": "Lazy Mix Images",
     "InversionDemoLazyConditional": "Lazy Conditional",
